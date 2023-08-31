@@ -1,6 +1,6 @@
 @layer base {
   :root {
-    --made-with-panda: '🐼'
+    --made-with-panda: '🐼';
     }
 
   *, *::before, *::after, ::backdrop {
@@ -31,6 +31,48 @@
     --skew-x: 0;
     --skew-y: 0;
     --scale-x: 1;
-    --scale-y: 1
+    --scale-y: 1;
+    }
+
+  body {
+    min-height: 100vh;
+    margin: auto;
+    }
+
+  body,header {
+    background: var(--colors-theme);
+    color: var(--colors-primary);
+    }
+
+  header {
+    height: 4rem;
+    position: fixed;
+    top: var(--spacing-0);
+    z-index: 100;
+    }
+
+  main {
+    border: 1px solid;
+    border-color: var(--colors-red-500);
+    }
+
+  @media screen and (min-width: 768px) {
+    body {
+      width: var(--sizes-breakpoint-md);
+        }
+
+    header {
+      height: 6rem;
+        }
+
+    main {
+      margin-top: 6rem;
+        }
+    }
+
+  @media screen and (min-width: 1024px) {
+    body {
+      width: var(--sizes-breakpoint-xl);
+        }
     }
 }
