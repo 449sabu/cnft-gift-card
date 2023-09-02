@@ -1,9 +1,8 @@
-import "./globals.css";
+// import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import Providers from "@/app/providers";
-
-const inter = Inter({ subsets: ["latin"] });
+// import Providers from "@/app/providers";
+import "@radix-ui/themes/styles.css";
+import { Theme, ThemePanel } from "@radix-ui/themes";
 
 export const metadata: Metadata = {
 	title: "Cardano Gift",
@@ -16,10 +15,21 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
-			<Providers>
-				<body className={inter.className}>{children}</body>
-			</Providers>
+		<html lang="en" suppressHydrationWarning>
+			{/* <Providers> */}
+			<body>
+				<Theme
+					accentColor="crimson"
+					grayColor="sand"
+					radius="large"
+					scaling="95%"
+					appearance="dark"
+				>
+					{children}
+					{/* <ThemePanel /> */}
+				</Theme>
+			</body>
+			{/* </Providers> */}
 		</html>
 	);
 }

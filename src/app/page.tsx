@@ -1,11 +1,15 @@
-import { css } from '@/styled-system/css';
-import Link from 'next/link';
+import fsPromises from "fs/promises";
+import path from "path";
+import { Section } from "@/components";
 
-export default function Home() {
-  return (
-    <main>
-      <div className={css({ fontSize: "2xl", fontWeight: 'bold' })}>Hello 🐼!</div>
-      <Link href="/gift">Create Gift Card</Link>
-    </main>
-  )
+export default async function Home() {
+	const filePath = path.join(process.cwd(), "aiken", "plutus.json");
+	const data = await fsPromises.readFile(filePath, "utf-8");
+	const blueprint = JSON.parse(data);
+
+	return (
+		<main>
+			<Section blueprint={blueprint} />
+		</main>
+	);
 }

@@ -58,28 +58,28 @@ export default defineConfig({
 		},
 	},
 
-	globalCss: {
-		body: {
-			width: { md: "breakpoint-md", lg: "breakpoint-xl" },
-			background: "theme",
-			color: "primary",
-			minHeight: { base: "100vh" },
-			margin: "auto",
-		},
-		header: {
-			background: "theme",
-			color: "primary",
-			height: { base: "4rem", md: "6rem" },
-			position: "fixed",
-			top: "0",
-			zIndex: "100",
-		},
-		main: {
-			marginTop: { md: "6rem" },
-			border: "1px solid",
-			borderColor: "red.500"
-		},
-	},
+	// globalCss: {
+	// 	body: {
+	// 		width: { md: "breakpoint-md", lg: "breakpoint-xl" },
+	// 		background: "theme",
+	// 		color: "primary",
+	// 		minHeight: { base: "100vh" },
+	// 		margin: "auto",
+	// 	},
+	// 	header: {
+	// 		background: "theme",
+	// 		color: "primary",
+	// 		height: { base: "4rem", md: "6rem" },
+	// 		position: "fixed",
+	// 		top: "0",
+	// 		zIndex: "100",
+	// 	},
+	// 	main: {
+	// 		marginTop: { md: "6rem" },
+	// 		border: "1px solid",
+	// 		borderColor: "red.500"
+	// 	},
+	// },
 
 	// The output directory for your css system
 	outdir: "./src/styled-system",
