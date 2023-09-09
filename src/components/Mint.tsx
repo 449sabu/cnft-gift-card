@@ -1,14 +1,19 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AppliedValidators, applyParams, Validators } from "@/utils/lucid";
-import { ConnectWallet } from "@/components";
-import { Lucid, Blockfrost, Constr, Data, fromText } from "lucid-cardano";
+import {
+	Constr,
+	Data,
+	fromText,
+	Metadata,
+} from "lucid-cardano";
 import { useStore } from "@/utils/zustand";
 import { Button, Flex, Heading, Link, TextField } from "@radix-ui/themes";
 
 export interface OneshotProps {
 	validators: Validators;
 }
+
 const Mint = ({ validators }: OneshotProps) => {
 	const lucid = useStore((state) => state.lucid);
 	const [tokenName, setTokenName] = useState<string>("Gift Card NFT");
@@ -27,10 +32,12 @@ const Mint = ({ validators }: OneshotProps) => {
 		if (lucid) {
 			const utxos = await lucid.wallet.getUtxos();
 			const utxo = utxos[0];
+			console.log(utxo)
 			const outputReference = {
 				txHash: utxo.txHash,
 				outputIndex: utxo.outputIndex,
 			};
+			console.log(outputReference)
 			const contracts = applyParams(
 				tokenName,
 				outputReference,
@@ -58,9 +65,83 @@ const Mint = ({ validators }: OneshotProps) => {
 				const assetName = `${parameterizedContracts!.policyId}${fromText(
 					tokenName
 				)}`;
+				console.log("assetName" + assetName);
 				const mintRedeemer = Data.to(new Constr(0, []));
 				const utxos = await lucid?.wallet.getUtxos()!;
 				const utxo = utxos[0];
+
+				// https://cips.cardano.org/cips/cip68/#222nftstandard
+				const nftMetadata: Metadata["222"] = {
+					name: "Gift Card NFT",
+					image: "ipfs://QmeRSe6ZPVqcEPU49GoyuEEGoXUwCHoKVLb8yEqHvDNaFi",
+					mediaType: "image/jpeg",
+					description: "CIEL GIFT CARD description",
+					files: [
+						{
+							name: "Gift Card NFT",
+							mediaType: "image/jpeg",
+							src: "ipfs://QmeRSe6ZPVqcEPU49GoyuEEGoXUwCHoKVLb8yEqHvDNaFi",
+						},
+					],
+				};
+
+				// https://cips.cardano.org/cips/cip25/
+				const oldMetadata = {
+					"1d078056117f5495b15afbc25513be17cd93bb7a6779037073d4b3fe": {
+						"Gift Card NFT": {
+							name: "Gift Card NFT",
+							image: "ipfs://QmYBNa1y2J8NKv6u3ZYkGK96fqRsNd3gXXPnTeNTbfPb2F",
+							mediaType: "image/jpeg",
+							description: "CIEL GIFT CARD description",
+							files: [
+								{
+									name: "CIEL GIFT CARD",
+									mediaType: "image/jpeg",
+									src: "ipfs://QmYBNa1y2J8NKv6u3ZYkGK96fqRsNd3gXXPnTeNTbfPb2F",
+								},
+							],
+						},
+					},
+					version: 1,
+				};
+
+				const svgMetadata = {
+					[parameterizedContracts!.policyId]: {
+						"Gift Card NFT": {
+							name: "Gift Card NFT",
+							// "image": [
+							// 	"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMwMC",
+							// 	"Igdmlld0JveD0iMCAwIDYwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy",
+							// 	"8yMDAwL3N2ZyI+PGcgdGV4dC1hbmNob3I9Im1pZGRsZSIgc3R5bGU9ImZvbnQ6Nz",
+							// 	"AwIDI1cHQgc2Fucy1zZXJpZiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMDAwIiBzdH",
+							// 	"Jva2Utd2lkdGg9IjIiPjx0ZXh0IHg9IjUwJSIgeT0iMTUlIj5pbnRlcmFjdGl2ZS",
+							// 	"B8IG9uY2hhaW4gfCBhcHBsaWNhdGlvbjwvdGV4dD48dGV4dCB4PSI1MCUiIHk9Ij",
+							// 	"U1JSIgZm9udC1zaXplPSI3NSI+U1RFTExBUiBIT09EPC90ZXh0Pjx0ZXh0IHg9Ij",
+							// 	"UwJSIgeT0iOTAlIiBmb250LXNpemU9IjU1Ij4jMTA0PC90ZXh0PjwvZz48L3N2Zz",
+							// 	"4="
+							// ],
+							"mediaType": "image/svg+xml",
+							description: "CIEL GIFT CARD description",
+							// "files": [{
+							// 	"name": " CIEL",
+							// 	"mediaType": "text/html",
+							// 	"src": [
+							// 		"data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAwIiBoZWlnaHQ9IjMwMC",
+							// 		"Igdmlld0JveD0iMCAwIDYwMCAzMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy",
+							// 		"8yMDAwL3N2ZyI+PGcgdGV4dC1hbmNob3I9Im1pZGRsZSIgc3R5bGU9ImZvbnQ6Nz",
+							// 		"AwIDI1cHQgc2Fucy1zZXJpZiIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjMDAwIiBzdH",
+							// 		"Jva2Utd2lkdGg9IjIiPjx0ZXh0IHg9IjUwJSIgeT0iMTUlIj5pbnRlcmFjdGl2ZS",
+							// 		"B8IG9uY2hhaW4gfCBhcHBsaWNhdGlvbjwvdGV4dD48dGV4dCB4PSI1MCUiIHk9Ij",
+							// 		"U1JSIgZm9udC1zaXplPSI3NSI+U1RFTExBUiBIT09EPC90ZXh0Pjx0ZXh0IHg9Ij",
+							// 		"UwJSIgeT0iOTAlIiBmb250LXNpemU9IjU1Ij4jMTA0PC90ZXh0PjwvZz48L3N2Zz",
+							// 		"4="
+							// 	]
+							// }]
+						},
+					},
+					version: 1,
+				}
+
 				const tx = await lucid!
 					.newTx()
 					.collectFrom([utxo])
@@ -72,6 +153,9 @@ const Mint = ({ validators }: OneshotProps) => {
 						// this redeemer is the first argument to the gift_card validator
 						mintRedeemer
 					)
+					// Metadata付きテスト
+					// .attachMetadata(222, nftMetadata)
+					.attachMetadata(721, svgMetadata)
 					.payToContract(
 						parameterizedContracts!.lockAddress,
 						{
@@ -245,6 +329,9 @@ const Mint = ({ validators }: OneshotProps) => {
 					<h3>Gift Card</h3>
 					<pre>{parameterizedContracts.giftCard.script}</pre> */}
 
+					<h3>Asset Name</h3>
+					<p>{fromText(tokenName)}</p>
+
 					<Flex gap="3">
 						<TextField.Root>
 							<TextField.Input
@@ -269,7 +356,6 @@ const Mint = ({ validators }: OneshotProps) => {
 								: "Create Gift Card (Locks ADA)"}
 						</Button>
 					</Flex>
-
 					<div>
 						{lockTxHash && (
 							<>

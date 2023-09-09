@@ -1,1 +1,8 @@
 @layer reset, base, tokens, recipes, utilities;
+
+.FormLabel[data-invalid] {
+  color: red;
+}
+.FormLabel[data-valid] {
+  color: green;
+}

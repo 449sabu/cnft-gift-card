@@ -77,6 +77,7 @@ export type AppliedValidators = {
 	giftCard: MintingPolicy;
 	policyId: string;
 	lockAddress: string;
+	outputReference: OutRef,
 };
 
 export function applyParams(
@@ -115,5 +116,6 @@ export function applyParams(
 		giftCard: { type: "PlutusV2", script: applyDoubleCborEncoding(giftCard) },
 		policyId,
 		lockAddress,
+		outputReference
 	};
 }
