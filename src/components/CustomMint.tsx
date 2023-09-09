@@ -104,7 +104,7 @@ const CustomMint = ({ validators }: CustomMintProps) => {
 			try {
 				const tokenMetadata = {
 					[parameterizedContracts.policyId]: {
-						tokenName: {
+						[tokenName]: {
 							name: tokenName,
 							image: cnftImageArray,
 							mediaType: "image/svg+xml",
