@@ -15,6 +15,7 @@ import {
 import { MagicWandIcon, GearIcon, LockOpen1Icon } from "@radix-ui/react-icons";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
+import Loading from "./Loading";
 
 const ConnectWallet = dynamic(
 	() => import("@/components").then((mod) => mod.ConnectWallet),
@@ -27,7 +28,7 @@ const CustomMint = dynamic(
 	() => import("@/components").then((mod) => mod.CustomMint),
 	{
 		ssr: false,
-		loading: () => <p>Loading...</p>,
+		loading: () => <Loading message="Loading" />,
 	}
 );
 
@@ -38,14 +39,14 @@ const CustomMint = dynamic(
 
 const Redeem = dynamic(() => import("@/components").then((mod) => mod.Redeem), {
 	ssr: false,
-	loading: () => <p>Loading...</p>,
+	loading: () => <Loading message="Loading" />,
 });
 
 const Settings = dynamic(
 	() => import("@/components").then((mod) => mod.Settings),
 	{
 		ssr: false,
-		loading: () => <p>Loading...</p>,
+		loading: () => <Loading message="Loading" />,
 	}
 );
 

@@ -6,6 +6,7 @@ import { applyParams, Validators } from "@/utils/lucid";
 import { useStore } from "@/utils/zustand";
 import { Box, Button, Card, Dialog, Flex, Grid, Text } from "@radix-ui/themes";
 import Link from "next/link";
+import { Loading } from "@/components";
 
 export interface RedeemProps {
 	validators: Validators;
@@ -138,7 +139,7 @@ const Redeem = ({ validators }: RedeemProps) => {
 	};
 
 	if (isFetchingAssets) {
-		return <Text>isFetching ...</Text>;
+		return <Loading message="Loading" />;
 	}
 
 	if (isErrorAssets) {

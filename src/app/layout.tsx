@@ -1,4 +1,4 @@
-// import "./globals.css";
+import "./globals.css";
 import "@radix-ui/themes/styles.css";
 import type { Metadata } from "next";
 import Providers from "@/app/providers";
