@@ -1,11 +1,10 @@
 'use client';
-import { Box, Flex, Grid, RadioGroup, Text } from '@radix-ui/themes';
+import { Flex, Grid, RadioGroup, Text } from '@radix-ui/themes';
 
 const Settings = () => {
   return (
     <Grid columns="2">
       <Flex direction="column" gap="4">
-        <Box></Box>
         <Text>ネットワーク</Text>
         <RadioGroup.Root defaultValue="3">
           <Flex gap="3" direction="row">
@@ -30,7 +29,6 @@ const Settings = () => {
           </Flex>
         </RadioGroup.Root>
       </Flex>
-      <Box></Box>
     </Grid>
   );
 };
