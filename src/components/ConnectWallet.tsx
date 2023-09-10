@@ -2,11 +2,13 @@
 import { CaretDownIcon } from '@radix-ui/react-icons';
 import { Button, DropdownMenu, Flex } from '@radix-ui/themes';
 import { Lucid, Blockfrost } from 'lucid-cardano';
+import { useState } from 'react';
 import { useBrowserWallet } from '@/hooks/useBrowserWallet';
 import { useStore } from '@/utils/zustand';
 
-const Test = () => {
+const ConnectWallet = () => {
   const setLucid = useStore((store) => store.setLucid);
+  const [wallet, setWallet] = useState('Connect Wallet');
   const { wallets } = useBrowserWallet();
 
   const walletList = wallets.map((wallet) => {
@@ -49,7 +51,8 @@ const Test = () => {
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Button variant="soft">
-            Select Wallet
+            {/* Select Wallet */}
+            {wallet}
             <CaretDownIcon />
           </Button>
         </DropdownMenu.Trigger>
@@ -59,6 +62,7 @@ const Test = () => {
               key={index}
               onClick={(e) => {
                 handleClick(e, element.key);
+                setWallet(element.name);
               }}
             >
               <Flex gap="4" align="center" justify="center">
@@ -73,4 +77,4 @@ const Test = () => {
   );
 };
 
-export default Test;
+export default ConnectWallet;

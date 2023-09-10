@@ -9,17 +9,21 @@ const ThemeButton = () => {
   if (theme === 'light') {
     return (
       <IconButton
+        size="3"
+        variant="soft"
         onClick={() => {
           setTheme('dark');
         }}
       >
-        <MoonIcon width="16" height="16" />
+        <MoonIcon width="18" height="18" />
       </IconButton>
     );
   }
 
   return (
     <IconButton
+      size="3"
+      variant="surface"
       onClick={() => {
         setTheme('light');
       }}
