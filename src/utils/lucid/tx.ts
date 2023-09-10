@@ -1,6 +1,6 @@
-import { Lucid, Constr, Data, fromText } from "lucid-cardano";
-import { TokenMetadata } from "@/types";
-import { AppliedValidators } from "@/utils/lucid";
+import { Lucid, Constr, Data, fromText } from 'lucid-cardano';
+import { TokenMetadata } from '@/types';
+import { AppliedValidators } from '@/utils/lucid';
 
 interface MintTransactionProps {
   lucid: Lucid;
@@ -20,9 +20,7 @@ export const mintTransaction = async ({
   const utxos = await lucid.wallet.getUtxos();
   const utxo = utxos[0];
   const mintRedeemer = Data.to(new Constr(0, []));
-  const assetName = `${parameterizedContracts!.policyId}${fromText(
-    "CNFT Gift Card",
-  )}`;
+  const assetName = `${parameterizedContracts!.policyId}${fromText('CNFT Gift Card')}`;
 
   const tx = await lucid
     .newTx()
@@ -35,7 +33,7 @@ export const mintTransaction = async ({
       {
         inline: Data.void(),
       },
-      { lovelace: BigInt(lovelace) },
+      { lovelace: BigInt(lovelace) }
     )
     .payToAddress(sendAddress, {
       [assetName]: BigInt(1),
