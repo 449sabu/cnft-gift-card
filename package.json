@@ -29,6 +29,7 @@
     "eslint-config-next": "13.4.19",
     "lucid-cardano": "^0.10.7",
     "next": "13.4.19",
+    "next-themes": "^0.2.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "satori": "^0.10.4",
@@ -37,7 +38,6 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
-    "@pandacss/dev": "^0.13.1",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "eslint": "^8.49.0",
