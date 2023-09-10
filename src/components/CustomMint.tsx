@@ -16,6 +16,7 @@ import { AppliedValidators, applyParams, Validators } from "@/utils/lucid";
 import { useStore } from "@/utils/zustand";
 import { useQuery } from "@tanstack/react-query";
 import { mintTransaction } from "@/utils/lucid/tx";
+import { SelectRules } from "@/components";
 
 export interface CustomMintProps {
 	validators: Validators;
@@ -201,6 +202,7 @@ const CustomMint = ({ validators }: CustomMintProps) => {
 							最大 1,000 ADA までロック可能です。
 						</Text>
 					</div>
+						{/* <SelectRules /> */}
 					<Button
 						disabled={
 							!parameterizedContracts || !address || !adaAmount || txChecking

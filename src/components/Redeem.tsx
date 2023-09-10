@@ -23,9 +23,9 @@ interface Assets {
 			image: string[];
 			mediaType: string;
 			ref: {
-				txHash: string
-				outputIndex: number
-			}
+				txHash: string;
+				outputIndex: number;
+			};
 		};
 		policy_id: string;
 	};
@@ -54,11 +54,12 @@ interface Assets {
 }
 
 const Redeem = ({ validators }: RedeemProps) => {
-	const tokenName = "CNFT Gift Card"
+	const tokenName = "CNFT Gift Card";
 	const lucid = useStore((state) => state.lucid);
 	const [open, setOpen] = useState<boolean>(false);
+	const [cancel, setCancel] = useState<boolean>(false);
 	const [waitingUnlockTx, setWaitingUnlockTx] = useState<boolean>(false);
-	const [unlockTxHash, setUnlockTxHash] = useState<string>("");
+	const [unlockTxHash, setUnlockTxHash] = useState<string | null>(null);
 
 	const getGiftCardList = async () => {
 		const utxos = await lucid?.wallet.getUtxos();
@@ -106,9 +107,7 @@ const Redeem = ({ validators }: RedeemProps) => {
 					lucid
 				);
 				const utxos = await lucid.utxosAt(data.tx.outputs[0].address);
-				const assetName = `${data.asset.policy_id}${fromText(
-					tokenName
-				)}`;
+				const assetName = `${data.asset.policy_id}${fromText(tokenName)}`;
 				const burnRedeemer = Data.to(new Constr(1, []));
 
 				const tx = await lucid
@@ -121,16 +120,17 @@ const Redeem = ({ validators }: RedeemProps) => {
 
 				const txSigned = await tx.sign().complete();
 				const txHash = await txSigned.submit();
-				const success = await lucid!.awaitTx(txHash);
-				
+
+				setOpen(true);
+
+				const success = await lucid.awaitTx(txHash);
 
 				if (success) {
 					setUnlockTxHash(txHash);
-					setOpen(true);
 					setWaitingUnlockTx(false);
 				}
 			} catch (error) {
-				alert(JSON.stringify(error));
+				setCancel(true);
 				setWaitingUnlockTx(false);
 			}
 		} else {
@@ -177,21 +177,45 @@ const Redeem = ({ validators }: RedeemProps) => {
 							</Button>
 							<Dialog.Root open={open} onOpenChange={setOpen}>
 								<Dialog.Content style={{ maxWidth: 450 }}>
-									<Dialog.Title>Success</Dialog.Title>
+									{unlockTxHash ? (
+										<Dialog.Title>Success</Dialog.Title>
+									) : (
+										<Dialog.Title>Spending</Dialog.Title>
+									)}
+									{/* <Dialog.Title>Success</Dialog.Title> */}
 									<Dialog.Description size="2" mb="4">
-										トランザクションは正常に処理されました。
+										{unlockTxHash
+											? "トランザクションは正常に処理されました。"
+											: ""}
 									</Dialog.Description>
-									<Flex direction="column" gap="3">
-										<Text as="div" size="2" mb="1" weight="bold">
-											Transaction Hash
-										</Text>
-										<Link
-											target="_blank"
-											href={`https://preview.cardanoscan.io/transaction/${unlockTxHash}`}
-										>
-											{unlockTxHash}
-										</Link>
+									{unlockTxHash ? (
+										<Flex direction="column" gap="3">
+											<Text as="div" size="2" mb="1" weight="bold">
+												Transaction Hash
+											</Text>
+											<Link
+												target="_blank"
+												href={`https://preview.cardanoscan.io/transaction/${unlockTxHash}`}
+											>
+												{unlockTxHash}
+											</Link>
+										</Flex>
+									) : (
+										<Loading message="トランザクション確認中" />
+									)}
+									<Flex gap="3" mt="4" justify="end">
+										<Dialog.Close>
+											<Button disabled={unlockTxHash === null}>閉じる</Button>
+										</Dialog.Close>
 									</Flex>
+								</Dialog.Content>
+							</Dialog.Root>
+							<Dialog.Root open={cancel} onOpenChange={setCancel}>
+								<Dialog.Content style={{ maxWidth: 450 }}>
+									<Dialog.Title>Cancel</Dialog.Title>
+									<Dialog.Description size="2" mb="4">
+										ADA の償還を中止しました。
+									</Dialog.Description>
 									<Flex gap="3" mt="4" justify="end">
 										<Dialog.Close>
 											<Button>閉じる</Button>
