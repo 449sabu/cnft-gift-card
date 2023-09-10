@@ -1,6 +1,6 @@
-import type { Cardano } from "lucid-cardano";
-import { useState, useEffect } from "react";
-import type { Wallets } from "@/types";
+import type { Cardano } from 'lucid-cardano';
+import { useState, useEffect } from 'react';
+import type { Wallets } from '@/types';
 
 export const useBrowserWallet = () => {
   const [wallets, setWallets] = useState<Array<Cardano[Wallets]>>([]);

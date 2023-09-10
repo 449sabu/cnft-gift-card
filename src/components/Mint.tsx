@@ -1,37 +1,26 @@
-"use client";
-import {
-  Box,
-  Button,
-  Card,
-  Dialog,
-  Flex,
-  Grid,
-  Link,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { z } from "zod";
+'use client';
+import { Box, Button, Card, Dialog, Flex, Grid, Link, Text, TextField } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import { z } from 'zod';
 // import { SelectRules } from '@/components';
-import { TokenMetadata } from "@/types";
-import { AppliedValidators, applyParams, Validators } from "@/utils/lucid";
-import { mintTransaction } from "@/utils/lucid/tx";
-import { useStore } from "@/utils/zustand";
+import { TokenMetadata } from '@/types';
+import { AppliedValidators, applyParams, Validators } from '@/utils/lucid';
+import { mintTransaction } from '@/utils/lucid/tx';
+import { useStore } from '@/utils/zustand';
 
 export interface CustomMintProps {
   validators: Validators;
 }
 
 const CustomMint = ({ validators }: CustomMintProps) => {
-  const tokenName = "CNFT Gift Card";
+  const tokenName = 'CNFT Gift Card';
   const lucid = useStore((state) => state.lucid);
-  const [sendAddress, setSendAddress] = useState<string>("");
+  const [sendAddress, setSendAddress] = useState<string>('');
   const [adaAmount, setAdaAmount] = useState<string | null>(null);
-  const [parameterizedContracts, setParameterizedContracts] =
-    useState<AppliedValidators | null>(null);
+  const [parameterizedContracts, setParameterizedContracts] = useState<AppliedValidators | null>(null);
   const [open, setOpen] = useState<boolean>(false);
-  const [txHash, setTxHash] = useState<string>("");
+  const [txHash, setTxHash] = useState<string>('');
   const [txChecking, setTxChecking] = useState<boolean>(false);
 
   const adaAmountSchema = z.number().min(1).max(1000);
@@ -41,10 +30,10 @@ const CustomMint = ({ validators }: CustomMintProps) => {
     isError: isErrorAddress,
     isFetching: isFetchingAddress,
   } = useQuery({
-    queryKey: ["address", { sendAddress }],
+    queryKey: ['address', { sendAddress }],
     queryFn: async () => {
-      const address = await fetch("/api/blockfrost/address", {
-        method: "POST",
+      const address = await fetch('/api/blockfrost/address', {
+        method: 'POST',
         body: JSON.stringify({ address: sendAddress }),
       }).then((res) => res.json());
       return address;
@@ -55,15 +44,12 @@ const CustomMint = ({ validators }: CustomMintProps) => {
   });
 
   const { data: cnftImageArray } = useQuery({
-    queryKey: ["base64_image", { adaAmount }],
+    queryKey: ['base64_image', { adaAmount }],
     queryFn: async () => {
-      const result: { base64Array: string[] } = await fetch(
-        "/api/core/preview",
-        {
-          method: "POST",
-          body: JSON.stringify({ lovelace: adaAmount }),
-        },
-      ).then((res) => res.json());
+      const result: { base64Array: string[] } = await fetch('/api/core/preview', {
+        method: 'POST',
+        body: JSON.stringify({ lovelace: adaAmount }),
+      }).then((res) => res.json());
       return result.base64Array;
     },
   });
@@ -76,16 +62,11 @@ const CustomMint = ({ validators }: CustomMintProps) => {
           txHash: utxo.txHash,
           outputIndex: utxo.outputIndex,
         };
-        const contracts = applyParams(
-          tokenName,
-          outputReference,
-          validators,
-          lucid,
-        );
+        const contracts = applyParams(tokenName, outputReference, validators, lucid);
         setParameterizedContracts(contracts);
       });
     } else {
-      alert("1: ウォレットが接続されていません");
+      alert('1: ウォレットが接続されていません');
     }
   }, []);
 
@@ -95,7 +76,7 @@ const CustomMint = ({ validators }: CustomMintProps) => {
     if (result.success) {
       setAdaAmount(e.currentTarget.value);
     } else {
-      setAdaAmount("");
+      setAdaAmount('');
     }
   };
 
@@ -109,7 +90,7 @@ const CustomMint = ({ validators }: CustomMintProps) => {
             [tokenName]: {
               name: tokenName,
               image: cnftImageArray,
-              mediaType: "image/svg+xml",
+              mediaType: 'image/svg+xml',
               ref: parameterizedContracts.outputReference,
             },
           },
@@ -128,8 +109,8 @@ const CustomMint = ({ validators }: CustomMintProps) => {
         const txHash = await txSigned.submit();
         setTxHash(txHash);
         setOpen(true);
-        setAdaAmount("");
-        setSendAddress("");
+        setAdaAmount('');
+        setSendAddress('');
         setTxChecking(false);
 
         // const success = await lucid.awaitTx(txHash);
@@ -145,9 +126,7 @@ const CustomMint = ({ validators }: CustomMintProps) => {
         setTxChecking(false);
       }
     } else {
-      alert(
-        "2 ウォレットが接続されていないか、コントラクトが作成できませんでした。",
-      );
+      alert('2 ウォレットが接続されていないか、コントラクトが作成できませんでした。');
       setTxChecking(false);
     }
   };
@@ -173,17 +152,15 @@ const CustomMint = ({ validators }: CustomMintProps) => {
             </TextField.Root>
             <Text size="1" align="left">
               {!sendAddress ? (
-                "アドレスの入力は必須です。"
+                'アドレスの入力は必須です。'
               ) : address ? (
                 <Text color="green">このアドレスは有効です。</Text>
               ) : isErrorAddress ? (
                 <Text color="red">このアドレスは無効です。</Text>
               ) : isFetchingAddress ? (
-                <Text color="yellow">
-                  アドレスの有効性をチェックしています。
-                </Text>
+                <Text color="yellow">アドレスの有効性をチェックしています。</Text>
               ) : (
-                ""
+                ''
               )}
             </Text>
           </div>
@@ -205,29 +182,23 @@ const CustomMint = ({ validators }: CustomMintProps) => {
           </div>
           {/* <SelectRules /> */}
           <Button
-            disabled={
-              !parameterizedContracts || !address || !adaAmount || txChecking
-            }
+            disabled={!parameterizedContracts || !address || !adaAmount || txChecking}
             onClick={async (e) => await createGiftCard(e)}
           >
-            {txChecking ? "トランザクション処理中..." : "CNFT をミントする"}
+            {txChecking ? 'トランザクション処理中...' : 'CNFT をミントする'}
           </Button>
 
           <Dialog.Root open={open} onOpenChange={setOpen}>
             <Dialog.Content style={{ maxWidth: 450 }}>
               <Dialog.Title>Success</Dialog.Title>
               <Dialog.Description size="2" mb="4">
-                トランザクションを送信しました。
-                オンチェーンに反映されるまで、数分かかる場合があります。
+                トランザクションを送信しました。 オンチェーンに反映されるまで、数分かかる場合があります。
               </Dialog.Description>
               <Flex direction="column" gap="3">
                 <Text as="div" size="2" mb="1" weight="bold">
                   Transaction Hash
                 </Text>
-                <Link
-                  target="_blank"
-                  href={`https://preview.cardanoscan.io/transaction/${txHash}`}
-                >
+                <Link target="_blank" href={`https://preview.cardanoscan.io/transaction/${txHash}`}>
                   {txHash}
                 </Link>
               </Flex>
@@ -246,12 +217,8 @@ const CustomMint = ({ validators }: CustomMintProps) => {
             <Text size="2" weight="bold" align="center">
               Preview Image
             </Text>
-            <Box style={{ height: "300px", width: "300px" }}>
-              {cnftImageArray ? (
-                <embed
-                  src={cnftImageArray.reduce((prev, current) => prev + current)}
-                />
-              ) : null}
+            <Box style={{ height: '300px', width: '300px' }}>
+              {cnftImageArray ? <embed src={cnftImageArray.reduce((prev, current) => prev + current)} /> : null}
             </Box>
 
             <Text size="2" weight="bold" align="center">

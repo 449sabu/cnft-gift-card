@@ -1,4 +1,4 @@
-import { Flex, Select, Text } from "@radix-ui/themes";
+import { Flex, Select, Text } from '@radix-ui/themes';
 
 const SelectRules = () => {
   return (
@@ -19,8 +19,7 @@ const SelectRules = () => {
           </Select.Content>
         </Select.Root>
         <Text size="1" align="left">
-          「No Roles」を選択すると、追加条件なく CNFT の保有者が ADA
-          を償還できます。
+          「No Roles」を選択すると、追加条件なく CNFT の保有者が ADA を償還できます。
         </Text>
       </Flex>
     </div>

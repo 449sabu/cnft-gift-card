@@ -1,5 +1,5 @@
-"use client";
-import { Box, Flex, Grid, RadioGroup, Text } from "@radix-ui/themes";
+'use client';
+import { Box, Flex, Grid, RadioGroup, Text } from '@radix-ui/themes';
 
 const Settings = () => {
   return (

@@ -1,5 +1,5 @@
-import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
-import { NextResponse } from "next/server";
+import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
+import { NextResponse } from 'next/server';
 
 interface Unit {
   policyId: string;
@@ -13,7 +13,7 @@ interface Body {
 }
 
 const API = new BlockFrostAPI({
-  projectId: process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY || "",
+  projectId: process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY || '',
 });
 
 export async function POST(request: Request) {
@@ -29,11 +29,11 @@ export async function POST(request: Request) {
           asset,
           tx,
         };
-      }),
+      })
     );
 
     return NextResponse.json({ assets });
   } catch (error) {
-    throw new Error("blockfrost fetch error.");
+    throw new Error('blockfrost fetch error.');
   }
 }

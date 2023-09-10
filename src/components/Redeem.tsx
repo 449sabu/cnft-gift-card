@@ -1,12 +1,12 @@
-"use client";
-import { Box, Button, Card, Dialog, Flex, Grid, Text } from "@radix-ui/themes";
-import { useQuery } from "@tanstack/react-query";
-import { Constr, Data, fromText, fromUnit } from "lucid-cardano";
-import Link from "next/link";
-import React, { useState } from "react";
-import { Loading } from "@/components";
-import { applyParams, Validators } from "@/utils/lucid";
-import { useStore } from "@/utils/zustand";
+'use client';
+import { Box, Button, Card, Dialog, Flex, Grid, Text } from '@radix-ui/themes';
+import { useQuery } from '@tanstack/react-query';
+import { Constr, Data, fromText, fromUnit } from 'lucid-cardano';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { Loading } from '@/components';
+import { applyParams, Validators } from '@/utils/lucid';
+import { useStore } from '@/utils/zustand';
 
 export interface RedeemProps {
   validators: Validators;
@@ -54,7 +54,7 @@ interface Assets {
 }
 
 const Redeem = ({ validators }: RedeemProps) => {
-  const tokenName = "CNFT Gift Card";
+  const tokenName = 'CNFT Gift Card';
   const lucid = useStore((state) => state.lucid);
   const [open, setOpen] = useState<boolean>(false);
   const [cancel, setCancel] = useState<boolean>(false);
@@ -66,12 +66,12 @@ const Redeem = ({ validators }: RedeemProps) => {
     const assets = utxos
       ?.map((utxo) => Object.keys(utxo.assets))
       .flat()
-      .filter((data) => data != "lovelace")
+      .filter((data) => data != 'lovelace')
       .map((unit) => fromUnit(unit))
       .filter((asset) => asset.name === fromText(tokenName));
 
-    const assetWithMetadata = await fetch("/api/blockfrost/asset", {
-      method: "POST",
+    const assetWithMetadata = await fetch('/api/blockfrost/asset', {
+      method: 'POST',
       body: JSON.stringify({ assets }),
     }).then((res) => res.json());
     return assetWithMetadata;
@@ -83,29 +83,21 @@ const Redeem = ({ validators }: RedeemProps) => {
     isFetching: isFetchingAssets,
   } = useQuery<{ assets: Assets[] }>(
     {
-      queryKey: ["assets"],
+      queryKey: ['assets'],
       queryFn: getGiftCardList,
       retryOnMount: false,
-    },
+    }
     // enabled: false,
     // retry: false
   );
 
-  const redeemGiftCard = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    data: Assets,
-  ) => {
+  const redeemGiftCard = async (e: React.MouseEvent<HTMLButtonElement>, data: Assets) => {
     e.preventDefault();
     setWaitingUnlockTx(true);
 
     if (lucid && assets) {
       try {
-        const contracts = applyParams(
-          tokenName,
-          data.asset.onchain_metadata.ref,
-          validators,
-          lucid,
-        );
+        const contracts = applyParams(tokenName, data.asset.onchain_metadata.ref, validators, lucid);
         const utxos = await lucid.utxosAt(data.tx.outputs[0].address);
         const assetName = `${data.asset.policy_id}${fromText(tokenName)}`;
         const burnRedeemer = Data.to(new Constr(1, []));
@@ -134,7 +126,7 @@ const Redeem = ({ validators }: RedeemProps) => {
         setWaitingUnlockTx(false);
       }
     } else {
-      alert("ウォレットが接続されていません");
+      alert('ウォレットが接続されていません');
     }
   };
 
@@ -151,52 +143,31 @@ const Redeem = ({ validators }: RedeemProps) => {
       {assets ? (
         assets.assets.map((data, index) => (
           <Card key={index} size="2">
-            <Flex
-              direction="column"
-              gap="3"
-              style={{ maxWidth: "300px", margin: "auto" }}
-            >
-              <Box style={{ height: "300px" }}>
-                <embed
-                  src={data.asset.onchain_metadata.image.reduce(
-                    (prev, current) => prev + current,
-                  )}
-                />
+            <Flex direction="column" gap="3" style={{ maxWidth: '300px', margin: 'auto' }}>
+              <Box style={{ height: '300px' }}>
+                <embed src={data.asset.onchain_metadata.image.reduce((prev, current) => prev + current)} />
               </Box>
-              <Text style={{ maxWidth: "300px" }}>
-                Policy ID : {data.asset.policy_id}
-              </Text>
+              <Text style={{ maxWidth: '300px' }}>Policy ID : {data.asset.policy_id}</Text>
               <Button
                 onClick={(event) => {
                   redeemGiftCard(event, data);
                 }}
               >
-                {waitingUnlockTx
-                  ? "トランザクション処理中..."
-                  : "ADA を償還する"}
+                {waitingUnlockTx ? 'トランザクション処理中...' : 'ADA を償還する'}
               </Button>
               <Dialog.Root open={open} onOpenChange={setOpen}>
                 <Dialog.Content style={{ maxWidth: 450 }}>
-                  {unlockTxHash ? (
-                    <Dialog.Title>Success</Dialog.Title>
-                  ) : (
-                    <Dialog.Title>Spending</Dialog.Title>
-                  )}
+                  {unlockTxHash ? <Dialog.Title>Success</Dialog.Title> : <Dialog.Title>Spending</Dialog.Title>}
                   {/* <Dialog.Title>Success</Dialog.Title> */}
                   <Dialog.Description size="2" mb="4">
-                    {unlockTxHash
-                      ? "トランザクションは正常に処理されました。"
-                      : ""}
+                    {unlockTxHash ? 'トランザクションは正常に処理されました。' : ''}
                   </Dialog.Description>
                   {unlockTxHash ? (
                     <Flex direction="column" gap="3">
                       <Text as="div" size="2" mb="1" weight="bold">
                         Transaction Hash
                       </Text>
-                      <Link
-                        target="_blank"
-                        href={`https://preview.cardanoscan.io/transaction/${unlockTxHash}`}
-                      >
+                      <Link target="_blank" href={`https://preview.cardanoscan.io/transaction/${unlockTxHash}`}>
                         {unlockTxHash}
                       </Link>
                     </Flex>

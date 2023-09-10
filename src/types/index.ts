@@ -1,12 +1,6 @@
-import { OutRef } from "lucid-cardano";
+import { OutRef } from 'lucid-cardano';
 
-export type Wallets =
-  | "nami"
-  | "flint"
-  | "eternl"
-  | "lace"
-  | "gerowallet"
-  | "cardwallet";
+export type Wallets = 'nami' | 'flint' | 'eternl' | 'lace' | 'gerowallet' | 'cardwallet';
 
 export interface TokenMetadata {
   [key: string]:

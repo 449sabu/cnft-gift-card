@@ -1,12 +1,12 @@
-import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
-import { NextResponse } from "next/server";
+import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
+import { NextResponse } from 'next/server';
 
 interface Body {
   address: string;
 }
 
 const API = new BlockFrostAPI({
-  projectId: process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY || "",
+  projectId: process.env.NEXT_PUBLIC_BLOCKFROST_API_KEY || '',
 });
 
 export async function POST(request: Request) {
@@ -16,6 +16,6 @@ export async function POST(request: Request) {
     const address = await API.addressesUtxosAll(body.address);
     return NextResponse.json({ address });
   } catch (error) {
-    throw new Error("blockfrost fetch error.");
+    throw new Error('blockfrost fetch error.');
   }
 }
