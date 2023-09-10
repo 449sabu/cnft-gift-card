@@ -16,17 +16,6 @@
   "rules": {
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
-    "import/order": [2, {"alphabetize": { "order": "asc" } }],
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "all",
-        "endOfLine": "lf",
-        "semi": true,
-        "singleQuote": true,
-        "printWidth": 80,
-        "tabWidth": 2
-      }
-    ]
+    "import/order": [2, {"alphabetize": { "order": "asc" } }]
   }
 }
