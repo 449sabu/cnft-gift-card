@@ -2,19 +2,25 @@
 
 <div align="center">
 
-<!-- [![Licence](https://img.shields.io/github/license/aiken-lang/aiken)](https://github.com/aiken-lang/aiken/blob/main/LICENSE) -->
 <!-- [![DEPLOY](https://img.shields.io/github/actions/workflow/status/449sabu/cnft-gift-card/deploy-docusaurus.yml?label=Deploy&style=for-the-badge&branch=main)](https://github.com/449sabu/cnft-gift-card/actions) -->
+[![Licence](https://img.shields.io/github/license/449sabu/cnft-gift-card?label=License&style=for-the-badge)](https://github.com/449sabu/cnft-gift-card/blob/main/LICENSE)
 [![ISSUES](https://img.shields.io/github/issues/449sabu/cnft-gift-card?label=Issues&style=for-the-badge)](https://github.com/449sabu/cnft-gift-card/issues)
 [![STARS](https://img.shields.io/github/stars/449sabu/cnft-gift-card?label=Stars&style=for-the-badge)](https://github.com/449sabu/cnft-gift-card/stargazers)
 [![LAST COMMIT](https://img.shields.io/github/last-commit/449sabu/cnft-gift-card?style=for-the-badge)](https://github.com/449sabu/cnft-gift-card/commit/main)
 
 </div>
 
+## About This
+This is an extended example of a gift card offered by Aiken.
+
 ## Stack
 
 - OnChain Code: [Aiken](https://aiken-lang.org/)
 - OffChain Code: [Lucid](https://lucid.spacebudz.io/)
 - Cardano API: [Blockfrost](https://blockfrost.io/)
+
+## Contributing
+See [Documentation]() to know how.
 
 ## Reference
 
